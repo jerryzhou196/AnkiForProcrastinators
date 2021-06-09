@@ -11,10 +11,14 @@ from subprocess import Popen
 import os
 import subprocess
 from aqt import gui_hooks
+from aqt.reviewer import Reviewer
+from typing import Callable
 
 #toaster = ToastNotifier()
 
 def get_due():
+    global end
+    end = 1
     while True:
         new, lrn, due = 0, 0, 0
         for tree in mw.col.sched.deckDueTree():
@@ -23,31 +27,32 @@ def get_due():
             due += tree[2]
         global value
         global inicial
-        value = new + lrn + due
+        value = new + lrn + duecvb
+        if value > 0: 
+            subprocess.call('netsh wlan disconnect', shell=True)
+        #        toaster.show_toast("Sample Notification","Anki time.")
+        else:
+            if end == 1:
+                subprocess.call('netsh wlan connect THOR', shell=True)
+                end = 0
+        #        toaster.show_toast("Sample Notification","No anki left for today.")
         time.sleep(1)
+        x = 0
 
-def disable_Enable_Wifi():
-    if value > 0:
-        subprocess.call('netsh wlan disconnect', shell=True)
-#        toaster.show_toast("Sample Notification","Anki time.")
-    else:
-        subprocess.call('netsh wlan connect THOR', shell=True)
-#        toaster.show_toast("Sample Notification","No anki left for today.")
+def func():
+    if x == 1:
+        threading.Thread(target=get_due).start()
 
-def ColdTurkey(self, _old):
-    ret = _old(self)
-    threading.Thread(target=get_due).start()
-    time.sleep(1)
-    threading.Thread(target=disable_Enable_Wifi).start()
-    value, inicial = None, None
-    if value != inicial:
-        disable_Enable_Wifi()
-    inicial = value
-    return ret
+def When_user_answers(reviewer: Reviewer, ease: int, _old: Callable):
+    x = 1
+
+def start(reviewer: Reviewer, _old: Callable):
+    func()
 
 def initializeViews():
     DeckBrowser._renderStats = wrap(
-        DeckBrowser._renderStats, ColdTurkey, "around")
+        DeckBrowser._renderStats, start, "around")
 
+x = 1
 initializeViews()
-#gui_hooks.reviewer_did_answer_card.append(ColdTurkey)
+gui_hooks.reviewer_did_answer_card.append(When_user_answers)
