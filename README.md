@@ -1,4 +1,4 @@
-# AnkiForProcrastinators
+# Anki For Procrastinators
 An addon for the open source software Anki, made to maximise your productivity.ou 
 
 # How it works
