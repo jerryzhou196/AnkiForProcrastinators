@@ -6,4 +6,4 @@ This addon disables your internet connection everytime you have cards to review.
 
 # Todo
 1 - Create a kamikazi mode that interacts with the Always on Top addon.
-  1.1 - Add the possibility for the user to choose if wheter or nor he wants to enable Always on Top.
+  1.1 - Add the possibility for the user to choose wheter or nor he wants to enable Always on Top.
