@@ -27,7 +27,7 @@ def get_due():
             due += tree[2]
         global value
         global inicial
-        value = new + lrn + duecvb
+        value = new + lrn + due
         if value > 0: 
             subprocess.call('netsh wlan disconnect', shell=True)
         #        toaster.show_toast("Sample Notification","Anki time.")
@@ -46,8 +46,9 @@ def func():
 def When_user_answers(reviewer: Reviewer, ease: int, _old: Callable):
     x = 1
 
-def start(reviewer: Reviewer, _old: Callable):
+def start(self, _old: Callable):
     func()
+    return _old(self)
 
 def initializeViews():
     DeckBrowser._renderStats = wrap(
